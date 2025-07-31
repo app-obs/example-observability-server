@@ -1,0 +1,25 @@
+target: all
+common:
+  storage:
+    backend: filesystem
+    filesystem:
+      dir: /data/common
+blocks_storage:
+  backend: filesystem
+  filesystem:
+    dir: /data/blocks
+ruler_storage:
+  backend: filesystem
+  filesystem:
+    dir: /data/ruler
+# --- Crucial for single-instance operation ---
+# For ingester and store-gateway, set replication_factor to 1 and disable zone awareness
+# because there's only one instance.
+ingester:
+  ring:
+    replication_factor: 1
+    zone_awareness_enabled: false # Important for single instance
+store_gateway:
+  sharding_ring:
+    replication_factor: 1
+    zone_awareness_enabled: false # Important for single instance
