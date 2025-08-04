@@ -1,0 +1,39 @@
+// OTLP Receiver
+otelcol.receiver.otlp "default" {
+	grpc {
+		endpoint = "0.0.0.0:4317"
+	}
+
+	http {
+		endpoint = "0.0.0.0:4318"
+	}
+
+	output {
+		traces  = [otelcol.exporter.otlp.tempo.input]
+		metrics = [otelcol.exporter.prometheus.mimir.input]
+	}
+}
+
+// Tempo Exporter
+otelcol.exporter.otlp "tempo" {
+	client {
+		endpoint = "tempo:4317"
+		tls {
+			insecure = true
+		}
+	}
+}
+
+// Mimir Exporter
+otelcol.exporter.prometheus "mimir" {
+	forward_to = [prometheus.remote_write.mimir.receiver]
+}
+
+prometheus.remote_write "mimir" {
+	endpoint {
+		url = "http://mimir:8080/api/v1/push"
+		headers = {
+			"X-Scope-OrgID" = "anonymous",
+		}
+	}
+}

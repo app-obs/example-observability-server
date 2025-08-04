@@ -8,11 +8,11 @@ It provides a complete environment for collecting and visualizing traces, logs, 
 
 This stack is built on the Grafana LGTM stack and includes:
 
+-   **Grafana Alloy**: A vendor-agnostic agent based on the OpenTelemetry Collector that receives all telemetry data (`traces`, `metrics`, `logs`) and forwards it to the appropriate backend (Tempo, Mimir, Loki).
 -   **Grafana**: For visualization, dashboards, and exploring telemetry.
 -   **Loki**: For log aggregation.
 -   **Grafana Tempo**: For distributed tracing.
 -   **Mimir**: For metrics.
--   **OpenTelemetry Collector**: A single, vendor-agnostic endpoint to receive all your telemetry data (`traces`, `metrics`, `logs`) and forward it to the appropriate backend (Tempo, Loki, Mimir).
 
 ## Prerequisites
 
@@ -42,7 +42,7 @@ docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all
 
 ## How to Use
 
-Once the stack is running, you can configure your instrumented applications to send telemetry to the OpenTelemetry Collector.
+Once the stack is running, you can configure your instrumented applications to send telemetry to Grafana Alloy.
 
 ### Connecting from Other Projects
 
@@ -64,7 +64,7 @@ Then, set the OTLP endpoint in your application's configuration (e.g., in its `.
 
 -   **OTLP Endpoint URL**: `http://host.docker.internal:4318`
 
-This is the most reliable method for cross-compose communication during local development.
+This endpoint now points to the Grafana Alloy collector, which will intelligently route traces to Tempo and metrics to Mimir.
 
 ### Service Endpoints
 
